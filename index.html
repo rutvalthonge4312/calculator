@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Calculator</title>
+
+    <!-- For styling -->
+    <style>
+      body {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: black;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      table {
+        border: 3px solid white;
+        border-radius: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 2px 2px 20px 8px #9d9d9d;
+      }
+
+      input:hover {
+        cursor: pointer;
+      }
+      input:active {
+        animation: buttonAnimation ease-in-out 0.3s;
+      }
+      @keyframes buttonAnimation {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      input[type="button"] {
+        width: 100%;
+        padding: 20px 40px;
+        background-image: linear-gradient(
+          to right,
+          rgba(255, 0, 0, 0),
+          rgb(216, 94, 94)
+        );
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+      }
+
+      input[type="text"] {
+        padding: 20px 30px;
+        font-size: 24px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        border: 2px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="heading">
+      <h1 style="color: white">Calculator..</h1>
+    </div>
+    <!-- Create table -->
+    <table id="calcu">
+      <tr>
+        <td colspan="3">
+          <input
+            type="text"
+            id="result"
+            value=""
+            placeholder="Calculator"
+            style="color: black"
+          />
+        </td>
+        <td><input type="button" value="c" /></td>
+      </tr>
+
+      <tr>
+        <td><input type="button" value="1" /></td>
+        <td><input type="button" value="2" /></td>
+        <td><input type="button" value="3" /></td>
+        <td><input type="button" value="/" /></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="4" /></td>
+        <td><input type="button" value="5" /></td>
+        <td><input type="button" value="6" /></td>
+        <td><input type="button" value="*" /></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="7" /></td>
+        <td><input type="button" value="8" /></td>
+        <td><input type="button" value="9" /></td>
+        <td><input type="button" value="-" /></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="0" /></td>
+        <td><input type="button" value="del" /></td>
+
+        <td><input type="button" value="=" /></td>
+        <td><input type="button" value="+" /></td>
+      </tr>
+    </table>
+  </body>
+  <script>
+    let button = document.getElementsByTagName("input");
+    let ouputDisplay = document.getElementById("result");
+    /*
+    let num1, num2;
+    let numberArray = [];
+    let operatorArray = [];
+    function precidance(checkOperator) {
+      if (checkOperator == "+" || checkOperator == "-") {
+        return 2;
+      } else {
+        return 1;
+      }
+    }
+
+    function addition(num1, num2) {
+      let sum = Number(num1) + Number(num2);
+      return sum;
+    }
+    function substraction(num1, num2) {
+      let sum = Number(num1) - Number(num2);
+      return sum;
+    }
+    function multuplication(num1, num2) {
+      let sum = Number(num1) * Number(num2);
+      return sum;
+    }
+    function division(num1, num2) {
+      let sum = Number(num1) / Number(num2);
+      return sum;
+    }
+    function calculations(num1, num2, checkOperator) {
+      if (checkOperator == "-") {
+        ouputDisplay.value = substraction(num1, num2);
+      } else if (checkOperator == "+") {
+        ouputDisplay.value = addition(num1, num2);
+      } else if (checkOperator == "*") {
+        ouputDisplay.value = multuplication(num1, num2);
+      } else if (checkOperator == "/") {
+        ouputDisplay.value = division(num1, num2);
+      }
+    }
+    */
+
+    for (let i = 0; i < button.length; i++) {
+      button[i].addEventListener("click", function () {
+        if (
+          button[i].value == 1 ||
+          button[i].value == 2 ||
+          button[i].value == 3 ||
+          button[i].value == 4 ||
+          button[i].value == 5 ||
+          button[i].value == 6 ||
+          button[i].value == 7 ||
+          button[i].value == 8 ||
+          button[i].value == 9 ||
+          button[i].value == 0
+        ) {
+          let temp = ouputDisplay.value;
+          ouputDisplay.value = temp + button[i].value;
+
+          /* let tempNode = document.createElement("p");
+              let optionText = document.createTextNode(button[i].value);
+              tempNode.appendChild(optionText);
+              ouputDisplay.appendChild(tempNode);*/
+        } else if (
+          button[i].value == "+" ||
+          button[i].value == "-" ||
+          button[i].value == "*" ||
+          button[i].value == "/"
+        ) {
+          if (ouputDisplay.value == "") {
+            alert("Enter the Number first");
+          } else {
+            let temp = ouputDisplay.value;
+            ouputDisplay.value = temp + button[i].value;
+          }
+        } else if (button[i].value == "c") {
+          ouputDisplay.value = "";
+        } else if (button[i].value == "del") {
+          let tempVar = ouputDisplay.value;
+          let updatedVal = tempVar.slice(0, tempVar.length - 1);
+          ouputDisplay.value = updatedVal;
+        } else if (button[i].value == "=") {
+          let tempString = ouputDisplay.value;
+          let arr = [...tempString];
+          let val = eval(tempString);
+
+          ouputDisplay.value = val;
+
+          /*
+             let num1String = "";
+          let num2String = "";
+          let next;
+          let checkOperator;
+          let inc = 0;
+          for (let l = 0; l < arr.length; l++) {
+            if (
+              arr[l] != "+" &&
+              arr[l] != "*" &&
+              arr[l] != "/" &&
+              arr[l] != "-"
+            ) {
+              num1String = num1String.concat(arr[l]);
+              console.log(num1String);
+            } else {
+              numberArray[inc] = num1String;
+              operatorArray[inc] = arr[l];
+              num1String = "";
+              inc++;
+            }
+            if (l == arr.length - 1) {
+              numberArray[inc] = num1String;
+            }
+          }
+
+          /* for (let j = 0; j < numberArray.length; j++) {
+                for (let k = 0; k < operatorArray.length; k++) {
+                  calculations(
+                    numberArray[j],
+                    numberArray[j + 1],
+                    operatorArray[k]
+                  );
+                  j++;
+                }
+              }*/
+        }
+      });
+    }
+  </script>
+</html>
