@@ -13,6 +13,7 @@
         align-items: center;
         height: 100vh;
         background-color: black;
+        background-image: linear-gradient(to top, black, rgb(208, 151, 151));
         font-family: Arial, Helvetica, sans-serif;
       }
       table {
@@ -64,6 +65,47 @@
         border-radius: 5px;
         border: 2px solid black;
       }
+      .mainContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid white;
+        border-radius: 9px;
+      }
+      .mainContainer > * {
+        margin: 1rem;
+      }
+      .previousRecord {
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        height: 200px;
+        width: 300px;
+        font-size: 1.2rem;
+        box-shadow: 1px 1px 16px 3px white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+      }
+      #clearButton {
+        width: 150px;
+        height: 40px;
+        border: none;
+        background: transparent;
+        font-size: 1.2rem;
+        color: aqua;
+      }
+      #clearButton:hover {
+        cursor: pointer;
+      }
+      .previousRecord h3 {
+        position: sticky;
+      }
+      .previousRecord::-webkit-scrollbar {
+        display: none;
+      }
     </style>
   </head>
 
@@ -72,50 +114,62 @@
       <h1 style="color: white">Calculator..</h1>
     </div>
     <!-- Create table -->
-    <table id="calcu">
-      <tr>
-        <td colspan="3">
-          <input
-            type="text"
-            id="result"
-            value=""
-            placeholder="Calculator"
-            style="color: black"
-          />
-        </td>
-        <td><input type="button" value="c" /></td>
-      </tr>
+    <div class="mainContainer">
+      <table id="calcu">
+        <tr>
+          <td colspan="3">
+            <input
+              type="text"
+              id="result"
+              value=""
+              placeholder="Calculator"
+              style="color: black"
+            />
+          </td>
+          <td><input type="button" value="c" /></td>
+        </tr>
 
-      <tr>
-        <td><input type="button" value="1" /></td>
-        <td><input type="button" value="2" /></td>
-        <td><input type="button" value="3" /></td>
-        <td><input type="button" value="/" /></td>
-      </tr>
-      <tr>
-        <td><input type="button" value="4" /></td>
-        <td><input type="button" value="5" /></td>
-        <td><input type="button" value="6" /></td>
-        <td><input type="button" value="*" /></td>
-      </tr>
-      <tr>
-        <td><input type="button" value="7" /></td>
-        <td><input type="button" value="8" /></td>
-        <td><input type="button" value="9" /></td>
-        <td><input type="button" value="-" /></td>
-      </tr>
-      <tr>
-        <td><input type="button" value="0" /></td>
-        <td><input type="button" value="del" /></td>
+        <tr>
+          <td><input type="button" value="1" /></td>
+          <td><input type="button" value="2" /></td>
+          <td><input type="button" value="3" /></td>
+          <td><input type="button" value="/" /></td>
+        </tr>
+        <tr>
+          <td><input type="button" value="4" /></td>
+          <td><input type="button" value="5" /></td>
+          <td><input type="button" value="6" /></td>
+          <td><input type="button" value="*" /></td>
+        </tr>
+        <tr>
+          <td><input type="button" value="7" /></td>
+          <td><input type="button" value="8" /></td>
+          <td><input type="button" value="9" /></td>
+          <td><input type="button" value="-" /></td>
+        </tr>
+        <tr>
+          <td><input type="button" value="0" /></td>
+          <td><input type="button" value="del" /></td>
 
-        <td><input type="button" value="=" /></td>
-        <td><input type="button" value="+" /></td>
-      </tr>
-    </table>
+          <td><input type="button" value="=" /></td>
+          <td><input type="button" value="+" /></td>
+        </tr>
+      </table>
+      <div>
+        <div class="previousRecord" style="color: white">
+          <h3>Previous Records</h3>
+        </div>
+        <div>
+          <button id="clearButton">Clear</button>
+        </div>
+      </div>
+    </div>
   </body>
   <script>
     let button = document.getElementsByTagName("input");
     let ouputDisplay = document.getElementById("result");
+    let previousRecord = document.getElementsByClassName("previousRecord");
+    let clearButton = document.getElementById("clearButton");
     /*
     let num1, num2;
     let numberArray = [];
@@ -156,6 +210,28 @@
       }
     }
     */
+
+    function myKeyPress(e) {
+      if (e.key == "Enter") {
+        let tempString = ouputDisplay.value;
+
+        let arr = [...tempString];
+        let val = eval(tempString);
+        if (val == NaN) {
+          ouputDisplay.value = "Infinite";
+        } else {
+          ouputDisplay.value = val;
+        }
+      }
+    }
+    clearButton.addEventListener("click", function () {
+      let li = document.getElementsByTagName("li");
+      let i = 0;
+      while (i < li.length) {
+        previousRecord[0].removeChild(li[i]);
+        i++;
+      }
+    });
 
     for (let i = 0; i < button.length; i++) {
       button[i].addEventListener("click", function () {
@@ -200,8 +276,17 @@
           let tempString = ouputDisplay.value;
           let arr = [...tempString];
           let val = eval(tempString);
+          let recordPrevious = tempString + "=" + val;
 
-          ouputDisplay.value = val;
+          let texNode = document.createElement("li");
+          let optionText = document.createTextNode(recordPrevious);
+          texNode.appendChild(optionText);
+          previousRecord[0].appendChild(texNode);
+          if (val == NaN) {
+            ouputDisplay.value = "Infinite";
+          } else {
+            ouputDisplay.value = val;
+          }
 
           /*
              let num1String = "";
@@ -230,7 +315,7 @@
           }
 
           /* for (let j = 0; j < numberArray.length; j++) {
-                for (let k = 0; k < operatorArray.length; k++) {
+                for (let k = 0; k <script operatorArray.length; k++) {
                   calculations(
                     numberArray[j],
                     numberArray[j + 1],
@@ -242,5 +327,6 @@
         }
       });
     }
+    document.addEventListener("keydown", myKeyPress);
   </script>
 </html>
